@@ -1,0 +1,22 @@
+.param-input {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  label {
+    width: 150px;
+    margin-right: 10px;
+  }
+
+  input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 400px;
+
+    &:focus {
+      border-color: #646cff;
+      outline: none;
+    }
+  }
+}
