@@ -1,54 +1,175 @@
-# React + TypeScript + Vite
+# Param Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Описание:**  
+Это приложение реализует редактор параметров для товара, позволяя пользователям редактировать значения параметров через форму. Приложение поддерживает типобезопасность с использованием TypeScript и легко расширяемо для добавления новых типов параметров (например, числовых или списков значений).
 
-Currently, two official plugins are available:
+## Технологии
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** — для создания компонентов пользовательского интерфейса.
+- **TypeScript** — для обеспечения строгой типизации данных и безопасности кода.
+- **SCSS (CSS Modules)** — для изоляции стилей и модульной стилизации компонентов.
+- **Vite** — современный инструмент сборки для быстрой разработки.
 
-## Expanding the ESLint configuration
+## Установка
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Для начала работы с проектом, выполните следующие шаги:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 1. Клонируйте репозиторий:
+
+```bash
+git clone hhttps://github.com/Quper24/selsup-test.git
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Перейдите в директорию проекта:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+cd selsup-test
 ```
+
+### 3. Установите зависимости:
+
+```bash
+npm install
+```
+
+### 4. Запустите проект:
+
+```bash
+npm run dev
+```
+
+После этого откройте браузер и перейдите по адресу http://localhost:5173 для просмотра приложения.
+
+## Структура проекта
+
+```
+/selsup-test
+├── /src
+│   ├── /components
+│   │   ├── ParamEditor.module.scss
+│   │   ├── ParamEditor.tsx
+│   │   ├── ParamInput.module.scss
+│   │   └── ParamInput.tsx
+│   ├── /types
+│   │   └── types.ts
+│   ├── App.module.scss
+│   ├── App.tsx
+│   ├── index.css
+│   └── main.tsx
+├── index.html
+├── package.json
+└── README.md
+```
+
+## Описание работы приложения
+
+Приложение представляет собой **Редактор параметров товара**, который позволяет:
+
+- Просматривать текущие значения параметров товара.
+- Редактировать значения параметров через текстовые поля.
+- Сохранять обновленную модель с новыми значениями.
+
+### Основные функциональности приложения:
+
+1. **Отображение параметров товара**:
+   Приложение принимает два основных набора данных:
+
+- params: список параметров товара.
+- model: текущие значения параметров.
+
+  - **Параметры**:
+    ```tsx
+    export interface Param {
+      id: number; // Уникальный идентификатор параметра
+      name: string; // Имя параметра
+      type: "string"; // Тип параметра (текущая версия поддерживает только строки)
+    }
+    ```
+  - **Модель**:
+
+    ```tsx
+    export interface Model {
+      paramValues: ParamValue[]; // Массив значений параметров
+    }
+
+    export interface ParamValue {
+      paramId: number; // Идентификатор параметра
+      value: string; // Текущее значение параметра
+    }
+    ```
+
+2. **Редактирование значений параметров**:
+
+- Все параметры отображаются в виде формы с текстовыми полями.
+- Значения параметров из объекта model автоматически подставляются в соответствующие поля.
+
+3. **Сохранение изменений**:
+
+- После редактирования значений пользователь может нажать кнопку Сохранить .
+- Обновленная модель выводится в консоль с помощью метода getModel().
+
+4. **Легкость расширения**:
+
+- Архитектура приложения позволяет легко добавлять новые типы параметров (например, числовые, логические или выпадающие списки).
+- Для этого можно использовать метод renderParamInput в компоненте ParamEditor.
+
+### Структура данных
+
+1. **Тип `ParamType`**:
+   Используется для определения допустимого типа параметра. В текущей версии поддерживается только текстовый тип:
+
+```ts
+export type ParamType = "string";
+```
+
+2. **Тип `Param`**:
+   Описывает отдельный параметр товара:
+
+```ts
+export interface Param {
+  id: number;
+  name: string;
+  type: ParamType; // На данный момент поддерживается только тип "string"
+}
+```
+
+3. **Тип `ParamValue`: Описывает значение параметра для конкретной модели товара:**:
+
+```ts
+export interface Param {
+  id: number;
+  name: string;
+  type: "string"; // На данный момент поддерживается только тип "string"
+}
+```
+
+4. **Тип `Model`: Описывает модель товара с набором значений параметров:**:
+
+```ts
+export interface Model {
+  paramValues: ParamValue[]; // Массив значений параметров товара
+}
+```
+
+## Компоненты приложения
+
+1. **ParamEditor**
+
+- Главный компонент, управляющий состоянием всех параметров.
+- Отображает форму с полями ввода для каждого параметра.
+- Предоставляет метод getModel() для получения обновленной модели.
+
+2. **ParamInput**
+
+- Компонент для отображения одного поля ввода параметра.
+- Принимает параметр, его текущее значение и обработчик изменения значения.
+
+## Процесс работы:
+
+1. При запуске приложения в форму подставляются параметры из объекта model с их текущими значениями.
+2. Пользователь может редактировать значения параметров через текстовые поля.
+3. После внесения изменений пользователь нажимает кнопку Сохранить , и обновленная модель выводится в консоль.
+
+## Лицензия
+
+- Этот проект распространяется под лицензией MIT.
